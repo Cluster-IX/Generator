@@ -1,0 +1,28 @@
+version: "3"
+
+services: 
+  db: 
+    image: mysql:latest
+    volumes: 
+      - './mysql_dump:/var/lib/mysql'
+      # - './data:/data'
+    environment:
+      UPLOAD_LIMIT: 1G
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: "CBT_JATIM"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    ports:
+      - '3306:3306'
+    container_name: cbt_db
+
+  pma:
+    depends_on:
+      - db
+    image: phpmyadmin
+    ports: 
+      - '3001:80'
+    environment: 
+      PMA_HOST: db 
+      UPLOAD_LIMIT: 1G
+      MYSQL_ROOT_PASSWORD: ""
+    container_name: cbt_pma
